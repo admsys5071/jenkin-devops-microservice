@@ -7,7 +7,7 @@ node {
 	echo "Test"
 
 	
-	echo "Test"
+	echo "Integration Test"
 	
 	
 }

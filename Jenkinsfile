@@ -1,14 +1,11 @@
-//SCRIPTED
-
-//DECLARATIVE
 pipeline {
     agent any
-	//agent { docker { image 'node:latest'}}
-	environment {
-		dockerHome = tool 'myDocker'
-		mavenHome = tool 'myMaven'
-		PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
-	}
+    //agent { docker { image 'node:latest'}}
+    environment {
+        dockerHome = tool 'myDocker'
+        mavenHome = tool 'myMaven'
+        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+    }
     tools {
         maven 'myMaven'
         jdk 'jdk11'
@@ -16,18 +13,18 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-				sh 'mvn --version'
+                sh 'mvn --version'
                 sh 'docker version'
-				echo "Build"
-				echo "PATH - $PATH"
-				echo "BUILD_NUMBER - $env.BUILD_NUMBER"
-				echo "BUILD_ID - $env.BUILD_ID"
-				echo "JOB_NAME - $env.JOB_NAME"
-				echo "BUILD_URL - $env.BUILD_URL"
+                echo "Build"
+                echo "PATH - $PATH"
+                echo "BUILD_NUMBER - $env.BUILD_NUMBER"
+                echo "BUILD_ID - $env.BUILD_ID"
+                echo "JOB_NAME - $env.JOB_NAME"
+                echo "BUILD_URL - $env.BUILD_URL"
             }
         }
         stage('Compile'){
-            steps{
+            steps {
                 sh "mvn clean compile"
             }
         }
@@ -44,35 +41,33 @@ pipeline {
         }
 
         stage('Package') {
-			steps {
-				sh "mvn package -DskipTests"
-			}
-		}
+            steps {
+                sh "mvn package -DskipTests"
+            }
+        }
 
         stage('Build Docker Image') {
-			steps {
-				//"docker build -t in28min/currency-exchange-devops:$env.BUILD_TAG"
-				script {
-					dockerImage = docker.build("admsys50/currency-exchange-devops:${env.BUILD_TAG}")
-				}
-
-			}
+            steps {
+                script {
+                    dockerImage = docker.build("admsys50/currency-exchange-devops:${env.BUILD_TAG}")
+                }
+            }
+        }
 
         stage('Push Docker Image') {
-			steps {
-				script {
-					docker.withRegistry('', 'dockerhub') {
-						dockerImage.push();
-						dockerImage.push('latest');
-					}
-				}
-			}
-		}
+            steps {
+                script {
+                    docker.withRegistry('', 'dockerhub') {
+                        dockerImage.push();
+                        dockerImage.push('latest');
+                    }
+                }
+            }
+        }
     } // Fin du bloc stages
 
     post {
         always {
-            // Utilisation de doubles quotes pour gérer l'apostrophe de "I'm"
             echo "I'm awesome; I run always"
         }
         success {
@@ -83,5 +78,3 @@ pipeline {
         }
     } // Fin du bloc post
 } // Fin de la pipeline
-
-}

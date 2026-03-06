@@ -29,13 +29,13 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "mvn Test"
+                sh "mvn test"
             }
         }
 
-        stage('Integration Test') {
+        stage('Integration test') {
             steps {
-                sh "mvn failsafe:integration-Test failsafe:verify"
+                sh "mvn failsafe:integration-test failsafe:verify"
             }
         }
     } // Fin du bloc stages

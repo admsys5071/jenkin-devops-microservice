@@ -9,6 +9,10 @@ pipeline {
 		mavenHome = tool 'myMaven'
 		PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
 	}
+    tools {
+        maven 'myMaven'
+        jdk 'jdk11'
+    }
     stages {
         stage('Checkout') {
             steps {

@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     // Correction : utilisation d'une image de base valide
-                    sh "sed -i 's/openjdk:8-jdk-alpine/openjdk:11-jre-slim/g' Dockerfile"
+                    sh "sed -i 's/openjdk:8-jdk-alpine/eclipse-temurin:11-jre-alpine/g' Dockerfile"
                     dockerImage = docker.build("admsys50/currency-exchange-devops:${env.BUILD_TAG}")
                 }
             }

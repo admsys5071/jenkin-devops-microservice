@@ -84,3 +84,4 @@ pipeline {
     } // Fin du bloc post
 } // Fin de la pipeline
 
+}
